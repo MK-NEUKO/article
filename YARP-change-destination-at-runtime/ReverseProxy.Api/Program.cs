@@ -23,6 +23,13 @@ app.MapReverseProxy();
 
 app.UseHttpsRedirection();
 
+app.MapGet("/get-configuration", () =>
+{
+    var configurationProvider = app.Services.GetRequiredService<IProxyConfigProvider>();
+    var currentConfiguration = configurationProvider.GetConfig();
+    return Results.Ok(currentConfiguration);
+});
+
 app.MapPost("/change-address/{address}", (string address) =>
     {
         var configurator = app.Services.GetRequiredService<IConfigurator>();
@@ -30,7 +37,7 @@ app.MapPost("/change-address/{address}", (string address) =>
 
         configurator.ChangeDestination(newAddress);
 
-        return Results.Ok($"Address was changed! Address{newAddress}");
+        return Results.Ok($"Address was changed to: {newAddress}");
     })
 .WithName("ChangeDestinationAddress");
 

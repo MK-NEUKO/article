@@ -9,11 +9,17 @@ internal sealed class Configurator(
 {
     public void ChangeDestination(string address)
     {
-        var currentConfiguration = configurationProvider.GetConfig();
+        // Instead of throwing an exception, a good alternative would be to return a corresponding result.
+        // This can then be communicated via the endpoint.
+        var currentConfiguration = configurationProvider.GetConfig() ?? 
+                                   throw new ArgumentNullException("configurationProvider.GetConfig()");
+
         var newClusters = new List<ClusterConfig>();
 
         foreach (var cluster in currentConfiguration.Clusters)
         {
+            // Here too, it would be better to return a corresponding result
+            if (cluster.Destinations == null) continue;
             var newDestinations = new Dictionary<string, DestinationConfig>(cluster.Destinations.Count);
             foreach (var destination in cluster.Destinations)
             {
