@@ -28,7 +28,8 @@ app.MapGet("/get-configuration", () =>
     var configurationProvider = app.Services.GetRequiredService<IProxyConfigProvider>();
     var currentConfiguration = configurationProvider.GetConfig();
     return Results.Ok(currentConfiguration);
-});
+})
+.WithName("GetReverseProxyConfiguration");
 
 app.MapPost("/change-address/{address}", (string address) =>
     {
