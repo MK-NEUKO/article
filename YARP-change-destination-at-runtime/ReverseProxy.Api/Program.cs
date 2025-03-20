@@ -1,9 +1,13 @@
+using ReverseProxy.Api.ReverseProxyConfiguration;
 using Scalar.AspNetCore;
+using Yarp.ReverseProxy.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton<IConfigurator, Configurator>();
+
 builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromMemory(DefaultConfiguration.GetRoutes(), DefaultConfiguration.GetClusters());
 
 builder.Services.AddOpenApi();
 
@@ -19,10 +23,15 @@ app.MapReverseProxy();
 
 app.UseHttpsRedirection();
 
-app.MapGet("/weatherforecast", () =>
+app.MapPost("/change-address/{address}", (string address) =>
     {
-        return Results.Ok($"Endpoint is online!");
+        var configurator = app.Services.GetRequiredService<IConfigurator>();
+        var newAddress = $"https://{address}";
+
+        configurator.ChangeDestination(newAddress);
+
+        return Results.Ok($"Address was changed! Address{newAddress}");
     })
-.WithName("GetWeatherForecast");
+.WithName("ChangeDestinationAddress");
 
 await app.RunAsync();

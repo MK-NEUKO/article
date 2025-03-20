@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>YARP_change_dsetination_at_runtime</RootNamespace>
+    <RootNamespace>ReverseProxy.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
