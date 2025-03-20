@@ -1,0 +1,6 @@
+@YARP_change_dsetination_at_runtime_HostAddress = http://localhost:5227
+
+GET {{YARP_change_dsetination_at_runtime_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
