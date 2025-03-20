@@ -1,3 +1,5 @@
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddReverseProxy()
@@ -10,6 +12,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.MapReverseProxy();
@@ -17,9 +20,9 @@ app.MapReverseProxy();
 app.UseHttpsRedirection();
 
 app.MapGet("/weatherforecast", () =>
-{
-    
-})
+    {
+        return Results.Ok($"Endpoint is online!");
+    })
 .WithName("GetWeatherForecast");
 
 await app.RunAsync();
